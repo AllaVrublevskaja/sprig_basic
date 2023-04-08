@@ -17,14 +17,6 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         ApplicationContext context =
                 new AnnotationConfigApplicationContext(ApplicationConfig.class);
-
-        DataSource src = context.getBean(DataSource.class);
-
-        Connection cnn = src.getConnection();
-        Statement st = cnn.createStatement();
-        ResultSet set = st.executeQuery("SELECT * FROM test");
-        while(set.next()) {
-            System.out.println(set.getInt(1));
-        }
+        context.getBean(UserController.class).action();
     }
 }

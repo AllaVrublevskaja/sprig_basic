@@ -1,37 +1,37 @@
 package org.example.service;
 
-import org.example.dao.UserDao;
-import org.example.exceptions.EmailAlreadyExistsException;
+import org.example.dao.UserDao1;
 import org.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 
 @Component
 public class UserServiceImpl implements UserService {
-    private final UserDao dao;
+
+    private final UserDao1 dao;
 
     @Autowired
-    public UserServiceImpl(UserDao dao) {
+    public UserServiceImpl(UserDao1 dao) {
         this.dao = dao;
     }
 
     @Override
-    public User findById(int id){
-        return dao.findById(id).orElseThrow(() -> new NoSuchElementException(
-            String.format("User with id = %d doesn't exist", id))
-        );
+    public Object findById(int id){
+        if(dao.findById(id) == null) {
+            return String.format("User with id = %d doesn't exist", id);
+        }
+       return dao.findById(id);
     }
 
     @Override
-    public User findByEmail(String email) {
-        return dao.findByEmail(email).orElseThrow(() -> new NoSuchElementException(
-            String.format("User with email = %s doesn't exist", email))
-        );
+    public Object findByEmail(String email) {
+        if(dao.findByEmail(email) == null) {
+            return String.format("User with email = %s doesn't exist", email);
+        }
+        return dao.findByEmail(email);
     }
 
     @Override
@@ -41,12 +41,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void add(User user) {
-        Optional<User> existingUser = dao.findByEmail(user.getEmail());
-        if(existingUser.isPresent()) {
-            throw new EmailAlreadyExistsException(
-                String.format("User with email %s already exists", user.getEmail())
-            );
-        }
-        dao.add(user);
+        List <User> users = dao.findAll();
+        boolean stop = false;
+        for ( User u : users)
+            if (u.getEmail().equals(user.getEmail())) {
+                stop = true;
+                break;
+            }
+        if (stop)
+            System.out.printf("User with email %s already exists \n", user.getEmail());
+        else
+            dao.add(user);
     }
 }

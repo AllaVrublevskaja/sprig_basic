@@ -32,22 +32,21 @@ public class UserController {
         boolean stop = false;
         while(!stop) {
             System.out.println("Input your command: ");
-            int command = scanner.nextInt();
-            scanner.nextLine();
+            String command = scanner.nextLine();
 
-            if (command == 1) {
+            if (command.equals("1")) {
                 findByIdHandler();
             }
-            else if (command == 2) {
+            else if (command.equals("2")) {
                 findByEmailHandler();
             }
-            else if(command == 3) {
+            else if(command.equals("3")) {
                 findAllHandler();
             }
-            else if(command == 4) {
+            else if(command.equals("4")) {
                 addUserHandler();
             }
-            else if(command == 5) {
+            else if(command.equals("5")) {
                 stop = true;
             }
         }

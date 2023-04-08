@@ -2,6 +2,7 @@ package org.example.dao;
 
 import org.example.model.User;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
